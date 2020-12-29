@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/sclevine/agouti"
 )
@@ -17,7 +18,7 @@ type CloudLog struct {
 func NewCloudLog() (*CloudLog, error) {
 	options := agouti.ChromeOptions(
 		"args", []string{
-			"--headless",
+			// "--headless",
 			// "--disable-gpu", // 暫定的に必要らしいです。
 			"--lang=ja",
 		})
@@ -46,7 +47,6 @@ func (c *CloudLog) Close() {
 
 // Login ログイン処理
 func (c *CloudLog) Login() {
-
 	fmt.Println("login page")
 	c.page.Navigate("https://app.innopm.com/login.cgi")
 	// fmt.Println(os.Getenv("CLOUDLOG_EMAIL"))
@@ -57,13 +57,19 @@ func (c *CloudLog) Login() {
 	// time.Sleep(5000 * time.Millisecond)
 }
 
-func clockIn() {
-
+// ClockIn 現在の時刻で出勤打刻を行う
+func (c *CloudLog) ClockIn() {
+	// c.page.FindByClass("start-time")
+	c.page.SetImplicitWait(500)
+	today := time.Now().Format("2020-12-31")
+	c.page.RunScript("stampTimestart(\"start\","+today+")", nil, nil)
+	// ToDo: 結果の扱い
 }
 
 func clockOut() {
 
 }
+
 func main() {
 	cloudLog, _ := NewCloudLog()
 	defer cloudLog.Close()
