@@ -69,10 +69,3 @@ func (c *CloudLog) ClockIn() {
 func clockOut() {
 
 }
-
-func main() {
-	cloudLog, _ := NewCloudLog()
-	defer cloudLog.Close()
-
-	cloudLog.Login()
-}
